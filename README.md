@@ -86,14 +86,35 @@ Clustering:
 - Amazon Datasets 
 
 # Prerequisite Installations
+Create a VM instance as shown in below article for integration of Google Colab and Google Cloud Platform. 
+
+Create a firewall rule 
 
 Update Google Cloud Platform  
 
     $ sudo apt-get update
+    $ sudo apt-get --assume-yes upgrade
+    $ sudo apt-get --assume-yes install software-properties-common
 
-Python Package Manager setup on GCP 
+Python Package Manager and Jupyter Notebook setup on GCP 
 
     $ sudo apt-get install python3-pip
+    $ sudo apt-get install python-setuptools python-dev build-essential
+    $ sudo easy_install pip
+    $ sudo pip install jupyter
+
+Generate Jupyter notebook configuration file:
+    $ jupyter notebook --generate-config
+
+Add below configuration in the Jupyter notebook config file:
+    $ sudo vi ~/.jupyter/jupyter_notebook_config.py
+
+        # Configuration file for jupyter-notebook.
+        c = get_config()
+        c.NotebookApp = '*'
+        c.NotebookApp.open_browser = False
+        c.NotebookApp.port = 8099 (Note that this is TCP port configured in GCP firewall)
+
 
 Here is the article for integrating Colab with Google Cloud Platform:
 
