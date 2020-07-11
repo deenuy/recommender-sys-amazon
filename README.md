@@ -85,19 +85,49 @@ Clustering:
 - GCP VM instance
 - Amazon Datasets 
 
-# Prerequisite Installations
+# Prerequisite Installations to run Notebook on GCP VM instance
+Create a VM instance as shown in below article for integration of Google Colab and Google Cloud Platform. 
+    - https://towardsdatascience.com/running-jupyter-notebook-in-google-cloud-platform-in-15-min-61e16da34d52
+
+Create a firewall rule 
 
 Update Google Cloud Platform  
 
     $ sudo apt-get update
+    $ sudo apt-get --assume-yes upgrade
+    $ sudo apt-get --assume-yes install software-properties-common
 
-Python Package Manager setup on GCP 
+Python Package Manager and Jupyter Notebook setup on GCP 
 
     $ sudo apt-get install python3-pip
+    $ sudo apt-get install python-setuptools python-dev build-essential
+    $ sudo pip install jupyter
+    $ wget http://repo.continuum.io/archive/Anaconda3-4.0.0-Linux-x86_64.sh
+    $ bash Anaconda3-4.0.0-Linux-x86_64.sh (Continue Yes as default for all prompts)
 
-Here is the article for integrating Colab with Google Cloud Platform:
+Install a Python package containing Jupyter Extensions
+    $ sudo apt-get install helpful_package (or)
+    $ sudo pip install helpful_package
+    $ jupyter serverextension enable --py helpful_package
 
-     https://medium.com/@senthilnathangautham/colab-gcp-compute-how-to-link-them-together-98747e8d940e
+Generate Jupyter notebook configuration file (jupyter_notebook_config.py):
+    $ jupyter notebook --generate-config
+
+Add below configuration in the Jupyter notebook config file:
+    $ sudo vi ~/.jupyter/jupyter_notebook_config.py
+
+        # Configuration file for jupyter-notebook.
+        c = get_config()
+        c.NotebookApp.ip = '*'
+        c.NotebookApp.open_browser = False
+        c.NotebookApp.port = 8089 (Note that this is TCP port configured in GCP External IP and firewall)
+
+Launching Jupyter Notebook
+    $ jupyter-notebook --no-browser --port=8089 
+    
+    Once console starts successfully, go to browser and run as following. Note that external ip address is the ip address which we made static and port number is the one which we allowed firewall access to as per above article. 
+
+    http://<External Static IP Address>:<Port Number>
 
 Download Amazon Dataset (2018) (Credits: Jianmo Ni, Jiacheng Li, Julian McAuley): 
     http://deepyeti.ucsd.edu/jianmo/amazon/index.html
